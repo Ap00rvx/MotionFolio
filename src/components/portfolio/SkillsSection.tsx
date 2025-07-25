@@ -28,6 +28,11 @@ const SkillsSection = () => {
       title: "Problem Solving",
       skills: ["Data Structures", "Algorithms", "CodeChef (3 stars)", "Codeforces (Pupil)"],
       icon: "🧠"
+    },
+    {
+      title: "DevOps & CI/CD",
+      skills: ["Docker", "GitHub Actions", "CI/CD Pipelines", "Agile Methodologies","AWS"],
+      icon: "🚀"
     }
   ];
 

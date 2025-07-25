@@ -6,34 +6,33 @@ import { Calendar, MapPin, Building } from "lucide-react";
 const ExperienceSection = () => {
   const experiences = [
     {
-      title: "SDE Intern (Web)",
+      title: "Software Development Engineer Intern (Web)",
       company: "Your Sport Your World",
-      location: "United Kingdom (Virtual)",
-      period: "Mar 2025 - Jun 2025",
+      location: "United Kingdom (Remote)",
+      period: "Mar 2025 - Present",
       type: "Internship",
-      description: "Working on web development projects with modern technologies",
+      description: "Contributing to the architecture and development of scalable web applications using modern JavaScript frameworks and cloud technologies.",
+      achievements: [
+        "Engineered core modules for a sports management platform, focusing on modularity and maintainability.",
+        "Implemented responsive UI components with accessibility best practices, enhancing user engagement across devices.",
+        "Collaborated in an Agile team to optimize application performance, reducing load times and improving reliability."
+      ],
       current: true
     },
     {
-      title: "Flutter Development",
+      title: "Flutter Developer Intern",
       company: "Spiderweb",
-      location: "Virtual",
+      location: "Remote",
       period: "Nov 2024 - Mar 2025",
       type: "Internship",
-      description: "Specialized Flutter development with focus on mobile applications"
-    },
-    {
-      title: "Full Stack Flutter Intern With Node.js",
-      company: "Purewashr",
-      location: "Virtual",
-      period: "Aug 2024 - Nov 2024",
-      type: "Internship",
+      description: "Developed cross-platform mobile applications using Flutter, emphasizing code reusability, performance, and seamless user experience.",
       achievements: [
-        "Developed a full-stack mobile application with database management system and integrated admin panel",
-        "Implemented Bloc state management, animations, and dependency injection for optimization",
-        "Achieved a 25% growth in performance and user efficiency through enhanced design and functionality"
+        "Built and maintained reusable widgets and custom animations to improve app interactivity.",
+        "Integrated RESTful APIs and managed state using Bloc for scalable data handling.",
+        "Conducted code reviews and contributed to CI/CD pipeline improvements."
       ]
     },
+    
     {
       title: "Full Stack Flutter Developer",
       company: "Purewashr Solutions",
@@ -41,21 +40,21 @@ const ExperienceSection = () => {
       period: "Jul 2024 - Oct 2024",
       type: "Full-time",
       achievements: [
-        "Developed a full-stack mobile application with database management system and integrated admin panel",
-        "Implemented Bloc state management, animations, and dependency injection for optimization",
-        "Achieved a 25% growth in performance and user efficiency through enhanced design and functionality"
+        "Led the development of a scalable mobile application with integrated admin panel and secure authentication.",
+        "Optimized backend APIs and database schemas to support high concurrency and low latency.",
+        "Drove a 25% increase in user efficiency by refining UI/UX and implementing best coding practices."
       ]
     },
     {
       title: "Flutter Intern",
       company: "Valenceware Services",
-      location: "Virtual",
+      location: "Remote",
       period: "Apr 2024 - Jun 2024",
       type: "Internship",
       achievements: [
-        "Developed a cross-platform Flutter app for web and Android with intuitive UI",
-        "Leveraged Flutter techniques like dependency injection, state management, and animations",
-        "Boosted app reach and user satisfaction by 50%, with 30% increase in retention and 25% reduction in bounce rates"
+        "Developed a cross-platform Flutter application for web and Android, focusing on modular architecture and maintainability.",
+        "Utilized dependency injection, Bloc state management, and custom animations to enhance code quality and user experience.",
+        "Increased app reach and retention by 50% through performance tuning and user-centric design."
       ]
     }
   ];

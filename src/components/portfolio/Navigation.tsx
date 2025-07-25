@@ -68,7 +68,9 @@ const Navigation = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
           >
-            <Button className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+            <Button 
+              onClick={() => window.open("#contact", "_self")}
+            className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
               Contact Me
             </Button>
           </motion.div>

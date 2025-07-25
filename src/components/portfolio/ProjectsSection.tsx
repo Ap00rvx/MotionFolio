@@ -9,30 +9,54 @@ const ProjectsSection = () => {
     {
       title: "CartStore",
       period: "Feb 2025 - Mar 2025",
-      description: "E-commerce platform with advanced cart management and user authentication",
+      description: "A robust quick commerce mobile app enabling users to browse, order, and track groceries and essentials in real-time. Features seamless authentication, intuitive product discovery, secure payments, and instant order notifications, all powered by a scalable Flutter and Firebase architecture.",
       technologies: ["Flutter", "Firebase", "Bloc", "REST API"],
-      image: "/placeholder.svg",
-      liveUrl: "#",
-      githubUrl: "#",
+      image: "/cart.png",
+      liveUrl: "https://drive.google.com/file/d/11feoA-_b9LendEYZRbsS9PkbGGFzIbfF/view?usp=sharing",
+      githubUrl: "https://github.com/Ap00rvx/CartVeg.git",
       featured: true
     },
     {
-      title: "Library Management System",
-      period: "Apr 2024 - May 2024",
-      description: "Complete library management system with Node.js, Express and MongoDB backend",
-      technologies: ["Node.js", "Express.js", "MongoDB", "REST API"],
-      image: "/placeholder.svg",
-      liveUrl: "#",
-      githubUrl: "#"
+      title: "GEM",
+      period: "2025",
+      description: "A productivity Chrome extension offering AI-powered chat, instant page summarization, code analysis, LeetCode assistance, and multi-language translation. Activate features with keyboard shortcuts: Ctrl+Shift+Q (Quick query), Ctrl+Shift+S (Summarize page), Ctrl+Shift+L (LeetCode helper), Ctrl+Shift+C (Code analysis), Ctrl+Shift+H (Show help).",
+      technologies: [
+        "TypeScript",
+        "Chrome Extension APIs",
+        "Google GEMINI API",
+        "CSS"
+      ],
+      image: "public/gem.png",
+      liveUrl: "https://github.com/Ap00rvx/Gem?tab=readme-ov-file#gem-chrome-extension---installation-guide",
+      githubUrl: "https://github.com/Ap00rvx/Gem?tab=readme-ov-file#gem-chrome-extension---installation-guide",
+      featured: false
     },
     {
-      title: "Easy Lib",
-      period: "Apr 2024",
-      description: "A Library management system designed for colleges and students with intuitive interface",
-      technologies: ["Flutter", "Node.js", "MongoDB", "Firebase"],
-      image: "/placeholder.svg",
-      liveUrl: "#",
-      githubUrl: "#"
+      title: "Coke Forces",
+      period: "June 2025",
+      description: `A comprehensive student Codeforces analytics and management platform for colleges. 
+- Student Table: List, add, edit, delete students with Name, Email, Phone, Handle, Ratings, and CSV export. View last update and detailed progress.
+- Student Profile: Contest history (filter by 30/90/365 days), interactive rating graph, contest list, problem-solving stats (filter by 7/30/90 days), hardest problem, bar chart by rating, submission heatmap.
+- Codeforces Data Sync: Daily cron job fetches and stores updated data; real-time sync on handle update; all data cached for fast access.
+- Inactivity Detection: Detects inactive students (no submissions in 7 days), sends reminder emails, tracks reminders, and allows disabling emails per student.
+`,
+      technologies: [
+        "React",
+        "TypeScript",
+        "Tailwind CSS",
+        "MUI X Charts",
+        "Chart.js",
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "Mongoose",
+        "Axios",
+        "CSV Export",
+        "Codeforces API"
+      ],
+      image: "public/cokde.png",
+      liveUrl: "https://coke.apurvabraj.space/",
+      githubUrl: "https://github.com/Ap00rvx/coke-forces.git"
     },
     {
       title: "Flash News",
@@ -41,7 +65,16 @@ const ProjectsSection = () => {
       technologies: ["Flutter", "Firebase", "Cloud Firestore", "FCM"],
       image: "/placeholder.svg",
       liveUrl: "#",
-      githubUrl: "#"
+      githubUrl: "https://github.com/Ap00rvx/Flash-news.git"
+    },
+    {
+      title: "Skill Connect - Job Portal",
+      period: "Feb 2025 - March 2025",
+      description: ` Skill Connect is a collaborative platform designed to connect individuals based on their skills, enabling knowledge sharing, mentorship, and networking. Users can create profiles, list their skills, seek help, and collaborate on projects with like-minded professionals.`,
+      technologies: ["Flutter", "Firebase", "Cloud Firestore", "FCM"],
+      image: "/logo.png",
+      liveUrl: "https://github.com/Ap00rvx/skill-connect-app.git",
+      githubUrl: "https://github.com/Ap00rvx/skill-connect-app.git"
     }
   ];
 
@@ -79,9 +112,7 @@ const ProjectsSection = () => {
               <Card className="overflow-hidden bg-gradient-card border-border/50 backdrop-blur-sm hover:shadow-card transition-all duration-300 h-full">
                 <div className="aspect-video bg-muted/20 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-primary/10 flex items-center justify-center">
-                    <div className="text-6xl text-primary/20 font-bold">
-                      {project.title.charAt(0)}
-                    </div>
+                    <img src={project.image} alt="" />
                   </div>
                   {project.featured && (
                     <Badge className="absolute top-4 left-4 bg-gradient-primary">
@@ -108,11 +139,16 @@ const ProjectsSection = () => {
                   </div>
                   
                   <div className="flex gap-3">
-                    <Button size="sm" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+                    <Button 
+                    onClick={() => window.open(project.liveUrl, "_blank")}
+                    
+                    size="sm" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Live Demo
                     </Button>
-                    <Button variant="outline" size="sm" className="border-primary/20 hover:border-primary/40">
+                    <Button 
+                     onClick={() => window.open(project.githubUrl, "_blank")}
+                    variant="outline" size="sm" className="border-primary/20 hover:border-primary/40">
                       <Github className="w-4 h-4 mr-2" />
                       Code
                     </Button>

@@ -1,15 +1,26 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Github, Mail, Phone, MapPin, ExternalLink } from "lucide-react";
+import Orb from "../ui/bg";
+import React from "react";
 
 const HeroSection = () => {
+  const [isHovered, setIsHovered] = React.useState(false);
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-hero relative overflow-hidden">
       {/* Animated background elements */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMjIiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PGNpcmNsZSBjeD0iNjAiIGN5PSI2MCIgcj0iMTAiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20" />
+      {/* <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMjIiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PGNpcmNsZSBjeD0iNjAiIGN5PSI2MCIgcj0iMTAiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20" /> */}
+      <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+  <Orb
+    hoverIntensity={0.5}
+    rotateOnHover={true}
+    hue={7}
+    forceHoverState={false }
+  />
+</div>
       
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center">
+      <div className="container mx-auto px-6  z-10 absolute ">
+        <div className="text-center " onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -40,7 +51,7 @@ const HeroSection = () => {
           >
             <div className="flex items-center gap-2 text-muted-foreground">
               <Mail className="w-4 h-4" />
-              <span>apoorvbraj@gmail.com</span>
+              <span>apurvabraj@gmail.com</span>
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Phone className="w-4 h-4" />
@@ -58,11 +69,17 @@ const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-wrap justify-center gap-4"
           >
-            <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+            <Button onClick={
+              () => window.open("#projects", "_self")
+            } size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
               <ExternalLink className="w-4 h-4 mr-2" />
               View Projects
             </Button>
-            <Button variant="outline" size="lg" className="border-primary/20 hover:border-primary/40 transition-all duration-300">
+            <Button
+              onClick={
+                () => window.open("https://github.com/Ap00rvx", "_blank")
+              }
+             variant="outline" size="lg" className="border-primary/20 hover:border-primary/40 transition-all duration-300">
               <Github className="w-4 h-4 mr-2" />
               GitHub
             </Button>

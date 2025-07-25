@@ -8,8 +8,8 @@ const ContactSection = () => {
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email",
-      value: "apoorvbraj@gmail.com",
-      link: "mailto:apoorvbraj@gmail.com"
+      value: "apurvabraj@gmail.com",
+      link: "mailto:apurvabraj@gmail.com"
     },
     {
       icon: <Phone className="w-6 h-6" />,
@@ -28,7 +28,8 @@ const ContactSection = () => {
   const achievements = [
     "Coordinator at Training & Placement cell of AKGEC",
     "Led a team of 11 members in college's IT department technical society",
-    "Big Data Centre of Excellence team lead",
+    "Organized 3+ Student Workshops",
+    "Conducted 2+ Coding Competitions",
     "CodeChef - 3 stars rating",
     "Codeforces - Pupil rating"
   ];
@@ -87,11 +88,19 @@ const ContactSection = () => {
             <div className="mt-8">
               <h4 className="text-lg font-semibold mb-4 text-foreground">Follow Me</h4>
               <div className="flex gap-4">
-                <Button variant="outline" size="sm" className="border-primary/20 hover:border-primary/40">
+                <Button 
+                onClick={
+                  () => window.open("https://github.com/Ap00rvx", "_blank")
+                }
+                variant="outline" size="sm" className="border-primary/20 hover:border-primary/40">
                   <Github className="w-4 h-4 mr-2" />
                   GitHub
                 </Button>
-                <Button variant="outline" size="sm" className="border-primary/20 hover:border-primary/40">
+                <Button 
+                onClick={
+                  () => window.open("https://www.linkedin.com/in/apurva-b-raj/", "_blank")
+                }
+                variant="outline" size="sm" className="border-primary/20 hover:border-primary/40">
                   <Linkedin className="w-4 h-4 mr-2" />
                   LinkedIn
                 </Button>
@@ -134,7 +143,9 @@ const ContactSection = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="mt-8"
             >
-              <Button size="lg" className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300">
+              <Button 
+              onClick={() => window.open("https://drive.google.com/file/d/1aNfp1_cFKqbJUPo3EYejm7ZLL848SXB_/view?usp=drive_link", "_blank")}
+              size="lg" className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300">
                 <ExternalLink className="w-4 h-4 mr-2" />
                 Download Resume
               </Button>
