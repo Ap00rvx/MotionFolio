@@ -26,7 +26,7 @@ const ProjectsSection = () => {
         "Google GEMINI API",
         "CSS"
       ],
-      image: "public/gem.png",
+      image: "/gem.png",
       liveUrl: "https://github.com/Ap00rvx/Gem?tab=readme-ov-file#gem-chrome-extension---installation-guide",
       githubUrl: "https://github.com/Ap00rvx/Gem?tab=readme-ov-file#gem-chrome-extension---installation-guide",
       featured: false
@@ -54,7 +54,7 @@ const ProjectsSection = () => {
         "CSV Export",
         "Codeforces API"
       ],
-      image: "public/cokde.png",
+      image: "/cokde.png",
       liveUrl: "https://coke.apurvabraj.space/",
       githubUrl: "https://github.com/Ap00rvx/coke-forces.git"
     },
