@@ -13,9 +13,9 @@ const HeroSection = () => {
       <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
   <Orb
     hoverIntensity={0.5}
-    rotateOnHover={true}
-    hue={7}
-    forceHoverState={false }
+    rotateOnHover={false}
+    hue={10}
+    forceHoverState={true }
   />
 </div>
       

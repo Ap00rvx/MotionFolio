@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Code, Database, Smartphone, Globe } from "lucide-react";
 
+
 const AboutSection = () => {
   const highlights = [
     {

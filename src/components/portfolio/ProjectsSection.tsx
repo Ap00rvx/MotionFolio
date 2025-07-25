@@ -99,64 +99,91 @@ const ProjectsSection = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
-              className={project.featured ? "lg:col-span-2" : ""}
-            >
-              <Card className="overflow-hidden bg-gradient-card border-border/50 backdrop-blur-sm hover:shadow-card transition-all duration-300 h-full">
-                <div className="aspect-video bg-muted/20 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-primary/10 flex items-center justify-center">
-                    <img src={project.image} alt="" />
-                  </div>
-                  {project.featured && (
-                    <Badge className="absolute top-4 left-4 bg-gradient-primary">
-                      Featured
-                    </Badge>
-                  )}
-                </div>
-                
-                <div className="p-6">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                    <Calendar className="w-4 h-4" />
-                    <span>{project.period}</span>
-                  </div>
+          {projects.map((project, index) => {
+            const handleCardMove = (e: React.MouseEvent<HTMLDivElement>) => {
+              const card = e.currentTarget;
+              const rect = card.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+              card.style.setProperty("--mouse-x", `${x}px`);
+              card.style.setProperty("--mouse-y", `${y}px`);
+            };
+
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: 0 }}
+                className={project.featured ? "lg:col-span-2" : ""}
+                onMouseMove={handleCardMove}
+                style={
+                  {
+                    "--mouse-x": "50%",
+                    "--mouse-y": "50%",
+                  } as React.CSSProperties
+                }
+              >
+                <Card className="group overflow-hidden bg-gradient-card border-border/50 backdrop-blur-sm hover:shadow-card transition-all duration-300 h-full relative">
+                  {/* Spotlight effect */}
+                  <div
+                    className="absolute inset-0 pointer-events-none transition-opacity duration-500 z-10 opacity-0 group-hover:opacity-100"
+                    style={{
+                      background:
+                        "radial-gradient(circle 600px at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.1), transparent 70%)",
+                    }}
+                  />
                   
-                  <h3 className="text-xl font-bold mb-3 text-foreground">{project.title}</h3>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">{project.description}</p>
-                  
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.technologies.map((tech, i) => (
-                      <Badge key={i} variant="secondary" className="text-xs">
-                        {tech}
+                  <div className="aspect-video bg-muted/20 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-primary/10 flex items-center justify-center">
+                      <img src={project.image} alt="" className="relative z-5 bg-gray-600 w-full " />
+                    </div>
+                    {project.featured && (
+                      <Badge className="absolute top-4 left-4 bg-gradient-primary z-10">
+                        Featured
                       </Badge>
-                    ))}
+                    )}
                   </div>
                   
-                  <div className="flex gap-3">
-                    <Button 
-                    onClick={() => window.open(project.liveUrl, "_blank")}
+                  <div className="p-6 relative z-5">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                      <Calendar className="w-4 h-4" />
+                      <span>{project.period}</span>
+                    </div>
                     
-                    size="sm" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Live Demo
-                    </Button>
-                    <Button 
-                     onClick={() => window.open(project.githubUrl, "_blank")}
-                    variant="outline" size="sm" className="border-primary/20 hover:border-primary/40">
-                      <Github className="w-4 h-4 mr-2" />
-                      Code
-                    </Button>
+                    <h3 className="text-xl font-bold mb-3 text-foreground">{project.title}</h3>
+                    <p className="text-muted-foreground mb-4 leading-relaxed">{project.description}</p>
+                    
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {project.technologies.map((tech, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs">
+                          {tech}
+                        </Badge>
+                      ))}
+                    </div>
+                    
+                    <div className="flex gap-3">
+                      <Button 
+                      onClick={() => window.open(project.liveUrl, "_blank")}
+                      
+                      size="sm" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Live Demo
+                      </Button>
+                      <Button 
+                       onClick={() => window.open(project.githubUrl, "_blank")}
+                      variant="outline" size="sm" className="border-primary/20 hover:border-primary/40">
+                        <Github className="w-4 h-4 mr-2" />
+                        Code
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
+                </Card>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

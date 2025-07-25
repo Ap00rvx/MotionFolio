@@ -76,66 +76,99 @@ const ExperienceSection = () => {
         </motion.div>
 
         <div className="max-w-4xl mx-auto">
-          {experiences.map((exp, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="relative"
-            >
-              {/* Timeline line */}
-              {index < experiences.length - 1 && (
-                <div className="absolute left-6 top-24 w-0.5 h-full bg-border" />
-              )}
-              
-              {/* Timeline dot */}
-              <div className="absolute left-4 top-8 w-4 h-4 bg-primary rounded-full shadow-glow" />
-              
-              <Card className="ml-12 mb-8 p-6 bg-gradient-card border-border/50 backdrop-blur-sm hover:shadow-card transition-all duration-300">
-                <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-foreground mb-2">{exp.title}</h3>
-                    <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                      <Building className="w-4 h-4" />
-                      <span className="font-medium">{exp.company}</span>
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        <span>{exp.period}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        <span>{exp.location}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <Badge variant={exp.current ? "default" : "secondary"}>
-                      {exp.current ? "Current" : exp.type}
-                    </Badge>
-                  </div>
-                </div>
-                
-                {exp.description && (
-                  <p className="text-muted-foreground mb-4">{exp.description}</p>
+          {experiences.map((exp, index) => {
+            const handleCardMove = (e: React.MouseEvent<HTMLDivElement>) => {
+              const card = e.currentTarget.querySelector('.experience-card') as HTMLElement;
+              if (card) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty("--mouse-x", `${x}px`);
+                card.style.setProperty("--mouse-y", `${y}px`);
+              }
+            };
+
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="relative"
+                onMouseMove={handleCardMove}
+              >
+                {/* Timeline line */}
+                {index < experiences.length - 1 && (
+                  <div className="absolute left-6 top-24 w-0.5 h-full bg-border" />
                 )}
                 
-                {exp.achievements && (
-                  <ul className="space-y-2">
-                    {exp.achievements.map((achievement, i) => (
-                      <li key={i} className="flex items-start gap-2 text-muted-foreground">
-                        <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
-                        <span>{achievement}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </Card>
-            </motion.div>
-          ))}
+                {/* Timeline dot */}
+                <div className="absolute left-4 top-8 w-4 h-4 bg-primary rounded-full shadow-glow z-10" />
+                
+                <Card 
+                  className="group experience-card ml-12 mb-8 p-6 bg-gradient-card border-border/50 backdrop-blur-sm hover:shadow-card transition-all duration-300 relative"
+                  style={
+                    {
+                      "--mouse-x": "50%",
+                      "--mouse-y": "50%",
+                    } as React.CSSProperties
+                  }
+                >
+                  {/* Spotlight effect */}
+                  <div
+                    className="absolute inset-0 pointer-events-none transition-opacity duration-500 z-10 opacity-0 group-hover:opacity-100 rounded-lg"
+                    style={{
+                      background:
+                        "radial-gradient(circle 600px at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.1), transparent 70%)",
+                    }}
+                  />
+                  
+                  <div className="relative z-20">
+                    <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+                      <div>
+                        <h3 className="text-xl font-bold text-foreground mb-2">{exp.title}</h3>
+                        <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                          <Building className="w-4 h-4" />
+                          <span className="font-medium">{exp.company}</span>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            <span>{exp.period}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <MapPin className="w-4 h-4" />
+                            <span>{exp.location}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Badge variant={exp.current ? "default" : "secondary"}>
+                          {exp.current ? "Current" : exp.type}
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    {exp.description && (
+                      <p className="text-muted-foreground mb-4">{exp.description}</p>
+                    )}
+                    
+                    {exp.achievements && (
+                      <ul className="space-y-2">
+                        {exp.achievements.map((achievement, i) => (
+                          <li key={i} className="flex items-start gap-2 text-muted-foreground">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
+                            <span>{achievement}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </Card>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
