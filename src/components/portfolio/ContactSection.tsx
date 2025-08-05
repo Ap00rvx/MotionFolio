@@ -1,9 +1,72 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, MapPin, Github, Linkedin, ExternalLink } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { Mail, Phone, MapPin, Github, Linkedin, ExternalLink, Send } from "lucide-react";
+import emailjs from '@emailjs/browser';
+import { useState, useRef } from "react";
 
 const ContactSection = () => {
+  const { toast } = useToast();
+  const form = useRef<HTMLFormElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // EmailJS configuration
+      const result = await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        form.current!,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+
+      console.log('Email sent successfully:', result.text);
+      
+      toast({
+        title: "Message sent successfully!",
+        description: "Thank you for reaching out. I'll get back to you soon.",
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: ""
+      });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      
+      toast({
+        title: "Failed to send message",
+        description: "Please try again or contact me directly via email.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const contactMethods = [
     {
       icon: <Mail className="w-6 h-6" />,
@@ -23,15 +86,6 @@ const ContactSection = () => {
       value: "Ghaziabad, India",
       link: "#"
     }
-  ];
-
-  const achievements = [
-    "Coordinator at Training & Placement cell of AKGEC",
-    "Led a team of 11 members in college's IT department technical society",
-    "Organized 3+ Student Workshops",
-    "Conducted 2+ Coding Competitions",
-    "CodeChef - 3 stars rating",
-    "Codeforces - Pupil rating"
   ];
 
   return (
@@ -54,16 +108,114 @@ const ContactSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Contact Information */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
+          {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
+            className="lg:col-span-2"
+          >
+            <h3 className="text-2xl font-bold mb-8 text-foreground">Send Me a Message</h3>
+            <Card className="p-8 bg-gradient-card border-border/50 backdrop-blur-sm">
+              <form ref={form} onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
+                      Full Name *
+                    </label>
+                    <Input
+                      id="name"
+                      name="name"
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Your full name"
+                      className="bg-background/50 border-border/50 focus:border-primary/50"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+                      Email Address *
+                    </label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="your.email@example.com"
+                      className="bg-background/50 border-border/50 focus:border-primary/50"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
+                    Subject *
+                  </label>
+                  <Input
+                    id="subject"
+                    name="subject"
+                    type="text"
+                    required
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    placeholder="What's this about?"
+                    className="bg-background/50 border-border/50 focus:border-primary/50"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
+                    Message *
+                  </label>
+                  <Textarea
+                    id="message"
+                    name="message"
+                    required
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    placeholder="Tell me about your project, ideas, or just say hello!"
+                    rows={6}
+                    className="bg-background/50 border-border/50 focus:border-primary/50 resize-none"
+                  />
+                </div>
+                
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  size="lg"
+                  className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 mr-2" />
+                      Send Message
+                    </>
+                  )}
+                </Button>
+              </form>
+            </Card>
+          </motion.div>
+
+          {/* Contact Information */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
           >
             <h3 className="text-2xl font-bold mb-8 text-foreground">Get In Touch</h3>
-            <div className="space-y-6">
+            <div className="space-y-6 mb-8">
               {contactMethods.map((method, index) => (
                 <motion.a
                   key={index}
@@ -85,7 +237,7 @@ const ContactSection = () => {
               ))}
             </div>
 
-            <div className="mt-8">
+            <div className="mb-8">
               <h4 className="text-lg font-semibold mb-4 text-foreground">Follow Me</h4>
               <div className="flex gap-4">
                 <Button 
@@ -106,50 +258,15 @@ const ContactSection = () => {
                 </Button>
               </div>
             </div>
-          </motion.div>
 
-          {/* Achievements & Activities */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h3 className="text-2xl font-bold mb-8 text-foreground">
-              Achievements & Activities
-            </h3>
-            <Card className="p-6 bg-gradient-card border-border/50 backdrop-blur-sm">
-              <ul className="space-y-4">
-                {achievements.map((achievement, index) => (
-                  <motion.li
-                    key={index}
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className="flex items-start gap-3"
-                  >
-                    <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
-                    <span className="text-muted-foreground leading-relaxed">{achievement}</span>
-                  </motion.li>
-                ))}
-              </ul>
-            </Card>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="mt-8"
+            <Button 
+              onClick={() => window.open("https://drive.google.com/file/d/1O6xCQWcB6L-c9ocQ62J-sYDby_IXYDV2/view?usp=sharing", "_blank")}
+              size="lg" 
+              className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300"
             >
-              <Button 
-              onClick={() => window.open("https://drive.google.com/file/d/1aNfp1_cFKqbJUPo3EYejm7ZLL848SXB_/view?usp=drive_link", "_blank")}
-              size="lg" className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300">
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Download Resume
-              </Button>
-            </motion.div>
+              <ExternalLink className="w-4 h-4 mr-2" />
+              Download Resume
+            </Button>
           </motion.div>
         </div>
       </div>

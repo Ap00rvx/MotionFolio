@@ -10,7 +10,7 @@ const ProjectsSection = () => {
       title: "CartStore",
       period: "Feb 2025 - Mar 2025",
       description: "A robust quick commerce mobile app enabling users to browse, order, and track groceries and essentials in real-time. Features seamless authentication, intuitive product discovery, secure payments, and instant order notifications, all powered by a scalable Flutter and Firebase architecture.",
-      technologies: ["Flutter", "Firebase", "Bloc", "REST API"],
+      technologies: ["Flutter", "Firebase", "Bloc", "REST API","Node.js", "Express", "MongoDB" ,"Redis", "TypeScript", "Razorpay"],
       image: "/cart.png",
       liveUrl: "https://drive.google.com/file/d/11feoA-_b9LendEYZRbsS9PkbGGFzIbfF/view?usp=sharing",
       githubUrl: "https://github.com/Ap00rvx/CartVeg.git",
@@ -138,8 +138,20 @@ const ProjectsSection = () => {
                   
                   <div className="aspect-video bg-muted/20 relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-primary/10 flex items-center justify-center">
-                      <img src={project.image} alt="" className="relative z-5 bg-gray-600 w-full " />
+                      <img 
+                        src={project.image} 
+                        alt="" 
+                        className="relative z-5 bg-gray-600 w-full transition-all duration-500 filter grayscale group-hover:grayscale-0" 
+                      />
                     </div>
+                    {/* Image spotlight effect */}
+                    <div
+                      className="absolute inset-0 pointer-events-none transition-opacity duration-500 z-10 opacity-0 group-hover:opacity-100"
+                      style={{
+                        background:
+                          "radial-gradient(circle 400px at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.2), transparent 60%)",
+                      }}
+                    />
                     {project.featured && (
                       <Badge className="absolute top-4 left-4 bg-gradient-primary z-10">
                         Featured

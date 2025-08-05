@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 *.zip
+
+.env 
+*.md 
+# Ignore build output
+
