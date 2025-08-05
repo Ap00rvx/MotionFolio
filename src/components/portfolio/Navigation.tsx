@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { scrollToSection } from "@/lib/lenis-utils";
 import { useState, useEffect } from "react";
 
 const Navigation = () => {
@@ -19,6 +20,7 @@ const Navigation = () => {
     { label: "Projects", href: "#projects" },
     { label: "Skills", href: "#skills" },
     { label: "Achievements", href: "#achievements" },
+    { label: "FAQ", href: "#faq" },
     { label: "Contact", href: "#contact" }
   ];
 
@@ -44,10 +46,13 @@ const Navigation = () => {
 
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item, index) => (
-              <motion.a
+              <motion.button
                 key={item.label}
-                href={item.href}
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(item.href);
+                }}
+                className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative bg-transparent border-none cursor-pointer"
                 whileHover={{ y: -2 }}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -60,7 +65,7 @@ const Navigation = () => {
                   whileHover={{ scaleX: 1 }}
                   transition={{ duration: 0.3 }}
                 />
-              </motion.a>
+              </motion.button>
             ))}
           </div>
 
@@ -70,8 +75,8 @@ const Navigation = () => {
             transition={{ duration: 0.8, delay: 0.5 }}
           >
             <Button 
-              onClick={() => window.open("#contact", "_self")}
-            className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+              onClick={() => scrollToSection("#contact")}
+              className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
               Contact Me
             </Button>
           </motion.div>

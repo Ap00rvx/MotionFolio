@@ -5,15 +5,20 @@ import ExperienceSection from "@/components/portfolio/ExperienceSection";
 import ProjectsSection from "@/components/portfolio/ProjectsSection";
 import SkillsSection from "@/components/portfolio/SkillsSection";
 import AchievementsSection from "@/components/portfolio/AchievementsSection";
+import FAQSection from "@/components/portfolio/FAQSection";
 import ContactSection from "@/components/portfolio/ContactSection";
 import ScrollVelocity from "@/components/ui/scrollReveal";
 import Preloader from "@/components/ui/Preloader";
+import { useLenis } from "@/hooks/use-lenis";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Initialize Lenis smooth scrolling
+  useLenis();
 
   const handlePreloaderComplete = () => {
     setIsLoading(false);
@@ -76,6 +81,9 @@ const Index = () => {
             </div>
             <div id="achievements">
               <AchievementsSection />
+            </div>
+            <div id="faq">
+              <FAQSection />
             </div>
             <div id="contact">
               <ContactSection />
