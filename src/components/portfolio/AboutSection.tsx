@@ -31,7 +31,7 @@ const AboutSection = () => {
     <section className="py-20 bg-background">
       <div className="container mx-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
@@ -52,10 +52,10 @@ const AboutSection = () => {
           {highlights.map((item, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              transition={{ duration: 0.3, delay: index * 0.2 }}
               whileHover={{ y: -5 }}
             >
               <Card className="p-6 h-full bg-gradient-card border-border/50 backdrop-blur-sm hover:shadow-card transition-all duration-300">

@@ -10,14 +10,18 @@ const HeroSection = () => {
     <section className="min-h-screen flex items-center justify-center bg-gradient-hero relative overflow-hidden">
       {/* Animated background elements */}
       {/* <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMjIiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PGNpcmNsZSBjeD0iNjAiIGN5PSI2MCIgcj0iMTAiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20" /> */}
-      <div style={{ width: '100vw', height: '100vh', position: 'relative' }} className="opacity-20">
+      <motion.div style={{ width: '100vw', height: '100vh', position: 'relative' }}
+      initial={{ opacity: 0,scale: 19 }}
+      whileInView={{ opacity: .4, scale: 1 }}
+      transition={{ duration: 1, ease: "easeInOut" }}
+     >
   <Orb
     hoverIntensity={0.3}
     rotateOnHover={false}
     hue={0}
     forceHoverState={true}
   />
-</div>
+</motion.div>
       
       <div className="container mx-auto px-6 z-10 absolute">
         <div className="text-center" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
