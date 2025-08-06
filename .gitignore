@@ -24,7 +24,8 @@ dist-ssr
 *.sw?
 *.zip
 
-.env 
+*.env
+*.example
 *.md 
 # Ignore build output
 

@@ -37,12 +37,14 @@ const Navigation = () => {
     >
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <motion.div
+          <motion.a
             whileHover={{ scale: 1.05 }}
+            href="/"
+          
             className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent"
           >
             Apurva B Raj
-          </motion.div>
+          </motion.a>
 
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item, index) => (
@@ -52,18 +54,16 @@ const Navigation = () => {
                   e.preventDefault();
                   scrollToSection(item.href);
                 }}
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative bg-transparent border-none cursor-pointer"
-                whileHover={{ y: -2 }}
+                className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative bg-transparent border-none cursor-pointer py-2 px-1"
+                whileHover={{ y: 0 }}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 {item.label}
                 <motion.div
-                  className="absolute bottom-0 left-0 w-full h-0.5 bg-primary origin-left"
-                  initial={{ scaleX: 0 }}
-                  whileHover={{ scaleX: 1 }}
-                  transition={{ duration: 0.3 }}
+                  className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white origin-left shadow-sm shadow-white/50 hover:w-full"
+                 
                 />
               </motion.button>
             ))}
