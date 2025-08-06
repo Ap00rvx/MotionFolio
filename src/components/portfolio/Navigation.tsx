@@ -21,7 +21,7 @@ const Navigation = () => {
     { label: "Skills", href: "#skills" },
     { label: "Achievements", href: "#achievements" },
     { label: "FAQ", href: "#faq" },
-    { label: "Contact", href: "#contact" }
+    
   ];
 
   return (
@@ -77,7 +77,7 @@ const Navigation = () => {
             <Button 
               onClick={() => scrollToSection("#contact")}
               className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
-              Contact Me
+              Connect with me
             </Button>
           </motion.div>
         </div>
