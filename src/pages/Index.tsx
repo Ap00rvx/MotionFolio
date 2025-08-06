@@ -9,6 +9,7 @@ import FAQSection from "@/components/portfolio/FAQSection";
 import ContactSection from "@/components/portfolio/ContactSection";
 import ScrollVelocity from "@/components/ui/scrollReveal";
 import Preloader from "@/components/ui/Preloader";
+import ScrollProgressIndicator from "@/components/ui/ScrollProgressIndicator";
 import { useLenis } from "@/hooks/use-lenis";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -28,16 +29,23 @@ const Index = () => {
     <div className="min-h-screen bg-background text-foreground">
       <Preloader onComplete={handlePreloaderComplete} />
       
+      {/* Scroll Progress Indicator */}
+      
+      
       <AnimatePresence>
         {!isLoading && (
+          
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="w-full"
           >
+            <ScrollProgressIndicator />
             <Navigation />
-            <HeroSection />
+            <div id="hero">
+              <HeroSection />
+            </div>
             <div id="about">
               <AboutSection />
             </div>
