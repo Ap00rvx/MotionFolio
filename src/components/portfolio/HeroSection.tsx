@@ -46,8 +46,7 @@ const HeroSection = () => {
             transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
             className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed"
           >
-            Full-Stack Developer specializing in Flutter, Node.js, and modern web technologies. 
-            Building scalable applications with clean code and seamless user experiences.
+            Software Engineer 
           </motion.p>
 
           <motion.div
