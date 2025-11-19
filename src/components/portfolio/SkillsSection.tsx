@@ -1,159 +1,193 @@
-import { motion } from "framer-motion";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { useEffect, useRef, useState } from "react";
+import Matter from "matter-js";
+
+const skills = [
+  "React", "TypeScript", "Next.js", "Node.js", "TailwindCSS",
+  "Three.js", "Framer Motion", "PostgreSQL", "GraphQL", "Docker",
+  "AWS", "Git", "Figma", "UI/UX", "System Design",
+  "Flutter", "Dart", "Firebase", "Bloc", "Riverpod",
+  "Python", "FastAPI", "C++", "Java", "SQL"
+];
 
 const SkillsSection = () => {
-  const skillCategories = [
-    {
-      title: "Mobile Development",
-      skills: ["Flutter", "Dart", "Android", "Cross-platform Development"],
-      icon: "📱"
-    },
-    {
-      title: "Backend Development",
-      skills: ["Node.js", "Express.js", "MongoDB", "REST API"],
-      icon: "⚙️"
-    },
-    {
-      title: "Frontend & Web",
-      skills: ["HTML", "CSS", "React", "Responsive Design"],
-      icon: "🌐"
-    },
-    {
-      title: "Cloud & Tools",
-      skills: ["Firebase", "Cloud Firestore", "Firebase Cloud Messaging", "Git"],
-      icon: "☁️"
-    },
-    {
-      title: "Problem Solving",
-      skills: ["Data Structures", "Algorithms", "CodeChef (3 stars)", "Codeforces (Pupil)"],
-      icon: "🧠"
-    },
-    {
-      title: "DevOps & CI/CD",
-      skills: ["Docker", "GitHub Actions", "CI/CD Pipelines", "Agile Methodologies", "AWS"],
-      icon: "🚀"
-    }
-  ];
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isInView, setIsInView] = useState(false);
+  const engineRef = useRef<Matter.Engine | null>(null);
+  const runnerRef = useRef<Matter.Runner | null>(null);
+  const renderRef = useRef<Matter.Render | null>(null);
 
-  const certifications = [
-    {
-      title: "Flutter Development",
-      issuer: "Udemy",
-      period: "Nov 2023 - Dec 2023",
-      description: "Basic Flutter and Dart programming with Provider state Management"
+  const bodiesRef = useRef<Map<string, Matter.Body>>(new Map());
+  const [skillElements, setSkillElements] = useState<JSX.Element[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
     }
-  ];
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isInView || !containerRef.current || !canvasRef.current) return;
+
+    if (engineRef.current) {
+      Matter.World.clear(engineRef.current.world, false);
+      Matter.Engine.clear(engineRef.current);
+    }
+
+    const width = containerRef.current.clientWidth;
+    const height = containerRef.current.clientHeight;
+
+    const engine = Matter.Engine.create();
+    const world = engine.world;
+    engineRef.current = engine;
+
+    const render = Matter.Render.create({
+      element: containerRef.current,
+      engine: engine,
+      canvas: canvasRef.current,
+      options: {
+        width,
+        height,
+        background: "transparent",
+        wireframes: false,
+        showAngleIndicator: false
+      }
+    });
+    renderRef.current = render;
+
+    // Walls - keep chips in the box
+    const wallThickness = 100;
+    const wallOptions = {
+      isStatic: true,
+      render: { visible: false }
+    };
+
+    const ground = Matter.Bodies.rectangle(width / 2, height - wallThickness / 2, width, wallThickness, wallOptions);
+    const leftWall = Matter.Bodies.rectangle(-wallThickness / 2, height / 2, wallThickness, height, wallOptions);
+    const rightWall = Matter.Bodies.rectangle(width + wallThickness / 2, height / 2, wallThickness, height, wallOptions);
+
+    Matter.World.add(world, [ground, leftWall, rightWall]);
+
+    // Skill Bodies
+    const newSkillElements: JSX.Element[] = [];
+
+    skills.forEach((skill) => {
+      const x = Math.random() * (width - 200) + 100;
+      const y = -Math.random() * 500 - 100;
+
+      const charWidth = 10;
+      const padding = 40;
+      const bodyWidth = skill.length * charWidth + padding;
+      const bodyHeight = 50;
+
+      const body = Matter.Bodies.rectangle(x, y, bodyWidth, bodyHeight, {
+        restitution: 0.6,
+        friction: 0.1,
+        chamfer: { radius: 25 },
+        render: { visible: false }
+      });
+
+      bodiesRef.current.set(skill, body);
+      Matter.World.add(world, body);
+
+      newSkillElements.push(
+        <div
+          key={skill}
+          id={`skill-${skill}`}
+          className="absolute top-0 left-0 bg-card border border-border text-foreground px-6 py-3 rounded-full shadow-sm font-medium whitespace-nowrap select-none pointer-events-none flex items-center justify-center"
+          style={{
+            width: `${bodyWidth}px`,
+            height: `${bodyHeight}px`,
+            transform: `translate(${x}px, ${y}px)`
+          }}
+        >
+          {skill}
+        </div>
+      );
+    });
+
+    setSkillElements(newSkillElements);
+
+    // Mouse Control
+    const mouse = Matter.Mouse.create(render.canvas);
+    const mouseConstraint = Matter.MouseConstraint.create(engine, {
+      mouse: mouse,
+      constraint: {
+        stiffness: 0.8,
+        render: { visible: false }
+      }
+    });
+
+    Matter.World.add(world, mouseConstraint);
+    render.mouse = mouse;
+
+    // Runner
+    const runner = Matter.Runner.create();
+    runnerRef.current = runner;
+    Matter.Runner.run(runner, engine);
+    Matter.Render.run(render);
+
+    // Sync Loop
+    let animationFrameId: number;
+    const updateLoop = () => {
+      bodiesRef.current.forEach((body, skill) => {
+        const element = document.getElementById(`skill-${skill}`);
+        if (element) {
+          const { x, y } = body.position;
+          const rotation = body.angle;
+          element.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}rad) translate(-50%, -50%)`;
+        }
+      });
+      animationFrameId = requestAnimationFrame(updateLoop);
+    };
+    updateLoop();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      Matter.Render.stop(render);
+      Matter.Runner.stop(runner);
+      if (engineRef.current) {
+        Matter.World.clear(engineRef.current.world, false);
+        Matter.Engine.clear(engineRef.current);
+      }
+    };
+  }, [isInView]);
 
   return (
-    <section className="py-20 bg-muted/20">
-      <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
-            Skills & Expertise
-          </h2>
-          <div className="h-1 w-16 bg-gradient-primary mx-auto rounded-full" />
-        </motion.div>
+    <section
+      ref={containerRef}
+      className="relative min-h-screen w-full bg-background overflow-hidden py-20"
+    >
+      <div className="container mx-auto px-6 mb-12 text-center relative z-10 pointer-events-none">
+        <h2 className="text-4xl md:text-6xl font-bold mb-6 text-foreground tracking-tighter">
+          Technical Skills
+        </h2>
+        <div className="h-1 w-24 bg-foreground mx-auto rounded-full mb-6" />
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          A collection of technologies I've worked with. Drag them around!
+        </p>
+      </div>
 
-        {/* Skills Categories */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {skillCategories.map((category, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 0 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: index * 0.2 }}
-              whileHover={{
-                y: -10,
-                rotateZ: Math.random() * 2 - 1,
-                transition: { duration: 0.2 }
-              }}
-            >
-              <Card className="p-6 h-full bg-gradient-card border-border/50 backdrop-blur-sm hover:shadow-card transition-all duration-300 hover:border-primary/50">
-                <div className="text-3xl mb-4">{category.icon}</div>
-                <h3 className="text-xl font-bold mb-4 text-foreground">{category.title}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill, i) => (
-                    <Badge key={i} variant="secondary" className="text-xs">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Certifications & Training */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto"
-        >
-          <h3 className="text-2xl font-bold mb-8 text-center text-foreground">
-            Certifications & Training
-          </h3>
-          <div className="grid gap-6">
-            {certifications.map((cert, index) => (
-              <Card key={index} className="p-6 bg-gradient-card border-border/50 backdrop-blur-sm">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div>
-                    <h4 className="text-lg font-semibold text-foreground mb-2">{cert.title}</h4>
-                    <p className="text-muted-foreground mb-2">{cert.description}</p>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span>{cert.issuer}</span>
-                      <span>•</span>
-                      <span>{cert.period}</span>
-                    </div>
-                  </div>
-                  <Badge className="bg-gradient-primary self-start md:self-center">
-                    Certified
-                  </Badge>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Education */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto mt-16"
-        >
-          <h3 className="text-2xl font-bold mb-8 text-center text-foreground">Education</h3>
-          <div className="grid gap-6">
-            <Card className="p-6 bg-gradient-card border-border/50 backdrop-blur-sm">
-              <h4 className="text-lg font-semibold text-foreground mb-2">
-                B.Tech, Information Technology
-              </h4>
-              <p className="text-primary font-medium mb-2">
-                Ajay Kumar Garg Engineering College Ghaziabad
-              </p>
-              <p className="text-muted-foreground">2022 - 2026</p>
-            </Card>
-            <Card className="p-6 bg-gradient-card border-border/50 backdrop-blur-sm">
-              <h4 className="text-lg font-semibold text-foreground mb-2">
-                Senior Secondary (XII), CISCE
-              </h4>
-              <p className="text-primary font-medium mb-2">
-                BISHOP JOHNSON SCHOOL & COLLEGE
-              </p>
-              <p className="text-muted-foreground">2022</p>
-            </Card>
-          </div>
-        </motion.div>
+      {/* Physics Container */}
+      <div className="absolute inset-0 w-full h-full">
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full pointer-events-auto cursor-grab active:cursor-grabbing"
+          style={{ opacity: 0.01 }}
+        />
+        {/* HTML Overlay for Skills */}
+        {skillElements}
       </div>
     </section>
   );

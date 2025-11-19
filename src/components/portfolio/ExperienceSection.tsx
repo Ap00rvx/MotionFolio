@@ -1,23 +1,29 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, Building } from "lucide-react";
-import { useMediaQuery } from "@/hooks/use-media-query"; // Assuming this hook exists or I will create/use simple check
+import Scene3D from "../3d/Scene3D";
+import Smiley3D from "../3d/Smiley3D";
 
 const ExperienceSection = () => {
   const targetRef = useRef<HTMLDivElement>(null);
+  const [showSmile, setShowSmile] = useState(false);
+
   const { scrollYProgress } = useScroll({
     target: targetRef,
   });
 
   const x = useTransform(scrollYProgress, [0, 1], ["1%", "-95%"]);
 
-  // Simple media query check (or use window.innerWidth if hook not available, but hook is cleaner. 
-  // Since I don't see the hook file in file list, I'll use a CSS-based approach with hidden/block classes 
-  // or a conditional render if I can confirm the hook. 
-  // To be safe and robust without adding new files, I will use CSS classes for layout switching 
-  // and conditional logic for the transform.)
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    // Trigger smile when near the end of the scroll (e.g., > 80%)
+    if (latest > 0.8) {
+      setShowSmile(true);
+    } else {
+      setShowSmile(false);
+    }
+  });
 
   const experiences = [
     {
@@ -30,7 +36,7 @@ const ExperienceSection = () => {
       achievements: [
         "Engineered core modules for a sports management platform.",
         "Implemented responsive UI components with accessibility best practices.",
-       
+    
       ],
       current: true
     },
@@ -43,7 +49,7 @@ const ExperienceSection = () => {
       description: "Developed cross-platform mobile applications using Flutter, emphasizing code reusability, performance, and seamless user experience.",
       achievements: [
         "Built and maintained reusable widgets and custom animations.",
-
+    
         "Conducted code reviews and contributed to CI/CD pipeline improvements."
       ]
     },
@@ -78,9 +84,9 @@ const ExperienceSection = () => {
 
       {/* Desktop View: Sticky Horizontal Scroll */}
       <div className="hidden md:flex sticky top-0 h-screen items-center overflow-hidden">
-        <motion.div style={{ x }} className="flex gap-8 px-24">
+        <motion.div style={{ x }} className="flex gap-8 px-24 items-center">
           {/* Title Card */}
-          <div className="flex-shrink-0 w-[400px] flex flex-col justify-center md:mr-20">
+          <div className="flex-shrink-0 w-[400px] flex flex-col justify-center md:mr-10">
             <h2 className="text-6xl md:text-8xl font-bold mb-6 text-foreground tracking-tighter">
               Work <br /> Experience
             </h2>
@@ -93,7 +99,7 @@ const ExperienceSection = () => {
           {/* Experience Cards */}
           {experiences.map((exp, index) => (
             <div key={index} className="relative group">
-              <Card className="w-[500px] h-[600px] flex-shrink-0 p-8 bg-card border-border hover:border-foreground/50 transition-all duration-500 flex flex-col justify-between rounded-none">
+              <Card className="w-[500px] h-[600px] flex-shrink-0 p-8 bg-card border-border hover:border-foreground/50 transition-all duration-500 flex flex-col justify-between rounded-none ">
                 <div>
                   <div className="flex justify-between items-start mb-6">
                     <Badge variant="outline" className="rounded-none border-foreground/20 text-foreground px-4 py-1">
@@ -142,6 +148,14 @@ const ExperienceSection = () => {
               </Card>
             </div>
           ))}
+
+          {/* Smiley 3D at the end */}
+          <div className="flex-shrink-0 w-[400px] h-[400px] flex items-center justify-center">
+            <Scene3D className="w-full h-full" enableControls={false}>
+              <Smiley3D forceSmile={showSmile} />
+            </Scene3D>
+          </div>
+
         </motion.div>
       </div>
 
@@ -213,6 +227,17 @@ const ExperienceSection = () => {
             </Card>
           </motion.div>
         ))}
+
+        {/* Mobile Smiley - Always happy or trigger on view? Let's trigger on view for mobile too if possible, or just pass showSmile if it works for mobile scroll. 
+            Actually scrollYProgress is for the whole section. On mobile the section is tall. 
+            So showSmile should work for mobile too as they scroll to bottom of section.
+        */}
+        <div className="w-full h-[300px] mt-8">
+          <Scene3D className="w-full h-full" enableControls={false}>
+            <Smiley3D forceSmile={showSmile} />
+          </Scene3D>
+        </div>
+
       </div>
     </section>
   );
