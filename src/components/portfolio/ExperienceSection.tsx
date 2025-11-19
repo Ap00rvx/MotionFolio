@@ -30,7 +30,7 @@ const ExperienceSection = () => {
       achievements: [
         "Engineered core modules for a sports management platform.",
         "Implemented responsive UI components with accessibility best practices.",
-        "Collaborated in an Agile team to optimize application performance."
+       
       ],
       current: true
     },
@@ -43,7 +43,7 @@ const ExperienceSection = () => {
       description: "Developed cross-platform mobile applications using Flutter, emphasizing code reusability, performance, and seamless user experience.",
       achievements: [
         "Built and maintained reusable widgets and custom animations.",
-        "Integrated RESTful APIs and managed state using Bloc.",
+
         "Conducted code reviews and contributed to CI/CD pipeline improvements."
       ]
     },
