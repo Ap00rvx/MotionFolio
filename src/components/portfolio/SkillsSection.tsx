@@ -31,7 +31,7 @@ const SkillsSection = () => {
     },
     {
       title: "DevOps & CI/CD",
-      skills: ["Docker", "GitHub Actions", "CI/CD Pipelines", "Agile Methodologies","AWS"],
+      skills: ["Docker", "GitHub Actions", "CI/CD Pipelines", "Agile Methodologies", "AWS"],
       icon: "🚀"
     }
   ];
@@ -66,13 +66,17 @@ const SkillsSection = () => {
           {skillCategories.map((category, index) => (
             <motion.div
               key={index}
-               initial={{ opacity: 0, y: 0 }}
+              initial={{ opacity: 0, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: index * 0.2 }}
-              whileHover={{ y: -5 }}
+              whileHover={{
+                y: -10,
+                rotateZ: Math.random() * 2 - 1,
+                transition: { duration: 0.2 }
+              }}
             >
-              <Card className="p-6 h-full bg-gradient-card border-border/50 backdrop-blur-sm hover:shadow-card transition-all duration-300">
+              <Card className="p-6 h-full bg-gradient-card border-border/50 backdrop-blur-sm hover:shadow-card transition-all duration-300 hover:border-primary/50">
                 <div className="text-3xl mb-4">{category.icon}</div>
                 <h3 className="text-xl font-bold mb-4 text-foreground">{category.title}</h3>
                 <div className="flex flex-wrap gap-2">

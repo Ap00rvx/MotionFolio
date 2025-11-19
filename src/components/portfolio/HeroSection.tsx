@@ -1,122 +1,90 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Github, Mail, Phone, MapPin, ExternalLink } from "lucide-react";
 import { scrollToSection } from "@/lib/lenis-utils";
-import Orb from "../ui/bg";
-import React from "react";
+import Scene3D from "../3d/Scene3D";
+import Hero3D from "../3d/Hero3D";
+import React, { useRef } from "react";
 
 const HeroSection = () => {
-  const [isHovered, setIsHovered] = React.useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  // 3D Scene Animations
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 3]); // "Boom" effect: scale up
+  const opacity3D = useTransform(scrollYProgress, [0, 0.3], [1, 0]); // Fade out 3D scene
+  const y3D = useTransform(scrollYProgress, [0, 0.5], [0, -100]); // Move up slightly
+
+  // Text Content Animations
+  const opacityText = useTransform(scrollYProgress, [0.2, 0.5], [0, 1]); // Fade in text
+  const yText = useTransform(scrollYProgress, [0.2, 0.5], [100, 0]); // Slide up text
+
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-hero relative overflow-hidden">
-      {/* Animated background elements */}
-      {/* <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMjIiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PGNpcmNsZSBjeD0iNjAiIGN5PSI2MCIgcj0iMTAiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20" /> */}
-      <motion.div style={{ width: '100vw', height: '100vh', position: 'relative' }}
-      initial={{ opacity: 0,scale: 19 }}
-  viewport={{ once: true }}
-      whileInView={{ opacity: .4, scale: 1  }}
-      transition={{ duration: 1.5,  }}
-      
-     >
-  <Orb
-    hoverIntensity={0.3}
-    rotateOnHover={false}
-    hue={0}
-    forceHoverState={true}
-  />
-</motion.div>
-      
-      <div className="container mx-auto px-6 z-10 absolute">
-        <div className="text-center" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-            className="mb-8"
-          >
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-              Apurva B Raj
-            </h1>
-            <div className="h-1 w-24 bg-gradient-primary mx-auto mb-6 rounded-full" />
-          </motion.div>
+    <section ref={containerRef} className="h-[200vh] relative bg-background">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
-            className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed"
-          >
-            Software Engineer 
-          </motion.p>
+        {/* 3D Scene Layer - Initially Full Screen */}
+        <motion.div
+          style={{ scale, opacity: opacity3D, y: y3D }}
+          className="absolute inset-0 z-10 w-full h-full"
+        >
+          <Scene3D cameraPosition={[0, 0, 6]} className="h-full w-full">
+            <Hero3D />
+          </Scene3D>
+        </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-            className="flex flex-wrap justify-center gap-4 mb-12"
-          >
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Mail className="w-4 h-4" />
-              <span>apurvabraj@gmail.com</span>
+        {/* Text Content Layer - Reveals on Scroll */}
+        <motion.div
+          style={{ opacity: opacityText, y: yText }}
+          className="container mx-auto px-6 z-20 relative"
+        >
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="mb-8">
+              <h1 className="text-6xl md:text-8xl font-bold mb-6 text-foreground tracking-tighter">
+                Apurva B Raj
+              </h1>
+              <div className="h-1 w-32 bg-foreground mx-auto mb-8 rounded-full" />
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Phone className="w-4 h-4" />
-              <span>+91 6306880941</span>
-            </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <MapPin className="w-4 h-4" />
-              <span>Ghaziabad</span>
-            </div>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
-            className="flex flex-wrap justify-center gap-4"
-          >
-            <Button onClick={() => scrollToSection("#projects")} size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
-              <ExternalLink className="w-4 h-4 mr-2" />
-              View Projects
-            </Button>
-            <Button
-              onClick={
-                () => window.open("https://github.com/Ap00rvx", "_blank")
-              }
-             variant="outline" size="lg" className="border-primary/20 hover:border-primary/40 transition-all duration-300">
-              <Github className="w-4 h-4 mr-2" />
-              GitHub
-            </Button>
-          </motion.div>
-        </div>
+            <p className="text-2xl md:text-3xl text-muted-foreground mb-12 leading-relaxed font-light">
+              Software Engineer
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-6 mb-16">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Mail className="w-5 h-5" />
+                <span>apurvabraj@gmail.com</span>
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Phone className="w-5 h-5" />
+                <span>+91 6306880941</span>
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <MapPin className="w-5 h-5" />
+                <span>Ghaziabad</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-6">
+              <Button onClick={() => scrollToSection("#projects")} size="lg" className="bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 rounded-none px-8 py-6 text-lg">
+                <ExternalLink className="w-5 h-5 mr-2" />
+                View Projects
+              </Button>
+              <Button
+                onClick={
+                  () => window.open("https://github.com/Ap00rvx", "_blank")
+                }
+                variant="outline" size="lg" className="border-foreground/20 hover:border-foreground/40 hover:bg-foreground/5 transition-all duration-300 rounded-none px-8 py-6 text-lg">
+                <Github className="w-5 h-5 mr-2" />
+                GitHub
+              </Button>
+            </div>
+          </div>
+        </motion.div>
       </div>
-
-      {/* Floating elements */}
-      <motion.div
-        animate={{ 
-          y: [-10, 10, -10],
-          opacity: [0.3, 0.6, 0.3]
-        }}
-        transition={{ 
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        className="absolute top-1/4 right-1/4 w-20 h-20 bg-primary/10 rounded-full blur-xl"
-      />
-      <motion.div
-        animate={{ 
-          y: [10, -10, 10],
-          opacity: [0.2, 0.5, 0.2]
-        }}
-        transition={{ 
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2
-        }}
-        className="absolute bottom-1/4 left-1/4 w-32 h-32 bg-accent/10 rounded-full blur-xl"
-      />
     </section>
   );
 };
